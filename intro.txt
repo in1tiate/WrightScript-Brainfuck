@@ -1,0 +1,17 @@
+disable_court_record_button
+waitenter
+set _textbox_skipupdate true
+"{sound none}{spd0}Initializing ASCII table..."
+init_ascii_table
+include ascii
+"{sound none}{spd0}Loading program to memory..."
+include program
+cstr_write program 107
+cstr_read program program_str
+textblock 4 4 240 192 color=999 name=programblock $program_str
+"{sound none}{spd0}Program loaded!"
+pause 180
+delete name=programblock
+set _textbox_skipupdate true
+interpret_brainfuck
+"Done!"

@@ -1,0 +1,316 @@
+[
+    [
+        "Assets",
+        [],
+        {
+            "items": [],
+            "_track": null,
+            "_loop": 0,
+            "variables": {
+                "_font_loading_size": "16",
+                "_examine_showbars": "true",
+                "_font_nt_size": "10",
+                "_profiles_present": "true",
+                "_font_tb_size": "10",
+                "_testimony_blinker": "true",
+                "_font_itemset_size": "10",
+                "ev_z_text_col": "FFFFFF",
+                "_list_back_button": "true",
+                "ev_z_textbox_x": "100",
+                "ev_z_icon_x": "25",
+                "ev_z_icon_y": "60",
+                "ev_larrow_y": "90",
+                "ev_larrow_x": "2",
+                "_penalty_script": "",
+                "_font_itemname_size": "10",
+                "_font_itemset_big_size": "14",
+                "_preload": "off",
+                "ev_zlarrow_x": "2",
+                "ev_zlarrow_y": "90",
+                "ev_z_bg_x": "0",
+                "_textbox_y": "",
+                "ev_z_bg": "general/evidence_zoom",
+                "_double_screen_list_fade": "false",
+                "_list_checked_img": "general/checkmark",
+                "_nt_image": "",
+                "ev_items_x": "38",
+                "_font_loading": "arial.ttf",
+                "ev_arrow_img": "general/arrow_right",
+                "_default_fg_frame_delay": "6",
+                "_blinkspeed_global": "default",
+                "_profiles_enable": "true",
+                "_default_port_frame_delay": "6",
+                "_examine_cursor_col": "FFFFFF",
+                "_textbox_show_button": "true",
+                "_textbox_wrap": "true",
+                "_music_fade": "100",
+                "_font_itemset": "pwinternational.ttf",
+                "ev_spacing_x": "48",
+                "ev_spacing_y": "46",
+                "_shake_sound": "false",
+                "_font_list": "pwinternational.ttf",
+                "ev_zrarrow_x": "240",
+                "ev_zrarrow_y": "90",
+                "_font_block_size": "10",
+                "_blinkspeed_next": "",
+                "_font_new_resume_size": "14",
+                "_examine_skipupdate": "off",
+                "_font_gametitle": "arial.ttf",
+                "_nt_text_color": "",
+                "_font_nt": "arial.ttf",
+                "_list_bg_image": "bg/main2",
+                "_cr_button": "true",
+                "ev_cursor_img": "general/cursor_ev",
+                "ev_items_y": "63",
+                "ev_mode_bg_evidence": "general/evidence",
+                "_cr_back_button": "true",
+                "_textbox_allow_skip": "false",
+                "ev_z_textbox_y": "70",
+                "_font_new_resume": "arial.ttf",
+                "_examine_mousedown": "false",
+                "ev_z_textbox_w": "130",
+                "ev_z_textbox_h": "100",
+                "_font_itemset_big": "arial.ttf",
+                "_evidence_present": "true",
+                "_textbox_lines": "3",
+                "ev_mode_y": "12",
+                "_default_frame_delay": "6",
+                "ev_mode_x": "4",
+                "_allow_saveload": "true",
+                "_font_block": "arial.ttf",
+                "_menu_fade_level": "50",
+                "_flash_sound": "false",
+                "_font_gametitle_size": "16",
+                "_textbox_wrap_avoid_controlled": "true",
+                "_currentline": "3",
+                "_examine_showcursor": "true",
+                "_list_checked_y": "-10",
+                "_list_checked_x": "-10",
+                "_textbox_x": "",
+                "_bigbutton_img": "general/buttonpress",
+                "_return": "",
+                "_layering_method": "zorder",
+                "_bigbutton_bg": "bg/main",
+                "ev_check_img": "general/check",
+                "ev_z_bg_y": "0",
+                "_examine_use": "",
+                "_punctuation": ".\u3002?!,;\u3001",
+                "_allow_click_save": "true",
+                "_textbox_skipupdate": "off",
+                "_evidence_enable": "true",
+                "_cr_button_loadsave": "on",
+                "_font_tb": "pwinternational.ttf",
+                "ev_rarrow_y": "90",
+                "ev_rarrow_x": "240",
+                "_font_list_size": "10",
+                "ev_mode_bg_profiles": "general/evidence",
+                "_nt_y": "",
+                "_nt_x": "",
+                "ev_modebutton_y": "7",
+                "ev_modebutton_x": "196",
+                "_font_itemname": "pwinternational.ttf",
+                "ev_zarrow_img": "general/arrow_right",
+                "_examine_cursor_img": "",
+                "_nt_text_x": "0",
+                "_nt_text_y": "0",
+                "ev_present_x": "90",
+                "ev_present_y": "0",
+                "_allow_click_load": "true",
+                "ev_show_mode_text": "true",
+                "ev_currentname_y": "35",
+                "ev_currentname_x": "30"
+            },
+            "lists": {}
+        },
+        null
+    ],
+    [
+        "assets.Script",
+        [],
+        {
+            "_world_id": 101334352,
+            "statement": "",
+            "pri": 0,
+            "scene": "local://builtin",
+            "cross": null,
+            "si": 3,
+            "lastline": 0,
+            "instatement": false,
+            "_objects": [
+                [
+                    "fg",
+                    [],
+                    {
+                        "dim": 0.74500000000000144,
+                        "screen_setting": "",
+                        "end": null,
+                        "name": "fg/../general/logosmall",
+                        "blinkspeed": [
+                            100,
+                            200
+                        ],
+                        "spd": 6,
+                        "invert": 0,
+                        "greyscale": 0,
+                        "pri": 0,
+                        "pos": [
+                            -25,
+                            -15
+                        ],
+                        "loopmode": 0,
+                        "id_name": "logo",
+                        "start": 0,
+                        "tint": null,
+                        "fade": 255,
+                        "loops": false,
+                        "x": 0,
+                        "z": 3,
+                        "rot": [
+                            0,
+                            0,
+                            0
+                        ],
+                        "wait": 1
+                    }
+                ],
+                [
+                    "guiWait",
+                    [],
+                    {
+                        "dim": 1,
+                        "screen_setting": "",
+                        "end": null,
+                        "blinkspeed": [
+                            100,
+                            200
+                        ],
+                        "spd": 6,
+                        "pri": 81,
+                        "pos": [
+                            0,
+                            0
+                        ],
+                        "loopmode": 0,
+                        "id_name": "_guiWait_",
+                        "start": 0,
+                        "run": "",
+                        "loops": 0,
+                        "x": 0,
+                        "z": 0,
+                        "rot": [
+                            0,
+                            0,
+                            0
+                        ]
+                    }
+                ]
+            ],
+            "viewed": {}
+        },
+        [
+            "stack",
+            0
+        ]
+    ],
+    [
+        "assets.Script",
+        [],
+        {
+            "_world_id": 101331632,
+            "statement": "",
+            "pri": 0,
+            "scene": "intro",
+            "cross": null,
+            "si": 1,
+            "lastline": 0,
+            "instatement": false,
+            "_objects": [
+                [
+                    "waitenter",
+                    [],
+                    {
+                        "dim": 1,
+                        "screen_setting": "",
+                        "end": null,
+                        "blinkspeed": [
+                            100,
+                            200
+                        ],
+                        "spd": 6,
+                        "pri": -1000,
+                        "pos": [
+                            0,
+                            0
+                        ],
+                        "loopmode": 0,
+                        "start": 0,
+                        "loops": 0,
+                        "x": 0,
+                        "z": 0,
+                        "rot": [
+                            0,
+                            0,
+                            0
+                        ]
+                    }
+                ]
+            ],
+            "viewed": {}
+        },
+        [
+            "stack",
+            1
+        ]
+    ],
+    [
+        "assets.Script",
+        [],
+        {
+            "_world_id": 101331632,
+            "statement": "",
+            "pri": 0,
+            "scene": "intro/interpret_brainfuck",
+            "cross": null,
+            "si": 3,
+            "lastline": 0,
+            "instatement": false,
+            "_objects": [
+                [
+                    "waitenter",
+                    [],
+                    {
+                        "dim": 1,
+                        "screen_setting": "",
+                        "end": null,
+                        "blinkspeed": [
+                            100,
+                            200
+                        ],
+                        "spd": 6,
+                        "pri": -1000,
+                        "pos": [
+                            0,
+                            0
+                        ],
+                        "loopmode": 0,
+                        "start": 0,
+                        "loops": 0,
+                        "x": 0,
+                        "z": 0,
+                        "rot": [
+                            0,
+                            0,
+                            0
+                        ]
+                    }
+                ]
+            ],
+            "_parent_index": 1,
+            "viewed": {}
+        },
+        [
+            "stack",
+            2
+        ]
+    ]
+]

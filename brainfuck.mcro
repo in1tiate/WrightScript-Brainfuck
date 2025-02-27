@@ -1,0 +1,149 @@
+### BRAINFUCK.MCRO
+### A Brainfuck interpreter
+### for WrightScript.
+### by in1tiate
+### May or may not work
+
+# interpret_brainfuck <program>
+macro interpret_brainfuck
+mus thinking
+set _textbox_skipupdate true
+"{sound none}{spd0}Interpreting...{n}Please be patient."
+set execution_ptr 1
+set cell_ptr 0
+set depth_counter 0
+set cell0 0
+set cell1 0
+set cell2 0
+set cell3 0
+set cell4 0
+set cell5 0
+set cell6 0
+set cell7 0
+set cell8 0
+set cell9 0
+set cell10 0
+set final_str
+
+label loopstart
+{ARRAY_GET_ITEM_BY_IDX program $execution_ptr chr}
+is chr END?
+goto endmacro
+interpret_chr
+delete name=cellblock1
+delete name=cellblock2
+delete name=cellblock3
+delete name=cellblock4
+//"{spd0}Interpreting: {$chr}{n}exptr: {$execution_ptr} cellptr: {$cell_ptr}{n}{$cell0} {$cell1} {$cell2} {$cell3} {$cell4} {$cell5} {$cell6}"
+textblock 4 4 240 192 color=999 name=cellblock1 chr: $chr 
+textblock 4 24 240 192 color=999 name=cellblock2 ins: $execution_ptr 
+textblock 4 44 240 192 color=999 name=cellblock3 cll: $cell_ptr 
+textblock 4 64 240 192 color=999 name=cellblock4 c0: $cell0 c1: $cell1 c2: $cell2 c3: $cell3 c4: $cell4 c5: $cell5 c6: $cell6
+flag jumpforward?
+goto handle_jumpforward
+flag jumpbackward?
+goto handle_jumpbackward
+
+addvar execution_ptr 1
+goto loopstart
+
+label handle_jumpforward
+set depth 0
+label jumpforward_loop
+# Check the next character
+addvar execution_ptr 1
+{ARRAY_GET_ITEM_BY_IDX program $execution_ptr chr}
+# Keep track of any additional [s we pass
+is chr [?
+addvar depth 1
+# Matching bracket! Score!
+is chr ] AND depth 0?
+addvar execution_ptr 1
+is chr ] AND depth 0?
+goto loopstart
+# Bracket, but not a matching one
+# implicitly, it must not be matching if we're here
+is chr ]?
+subvar depth 1
+# Else, start over
+goto jumpforward_loop
+
+label handle_jumpbackward
+# Pop the matching [ off the stack
+# then increment the execution ptr
+pop_stack check
+//"{$check}"
+set execution_ptr $check
+//addvar execution_ptr 1
+goto loopstart
+
+label endmacro
+mus
+set _textbox_skipupdate false
+sfx tada
+"Output: {$final_str}"
+endmacro
+
+macro interpret_chr
+joinvar current_cell cell $cell_ptr
+getvar current_cell_data $current_cell
+
+is chr >?
+addvar cell_ptr 1
+
+is chr <?
+subvar cell_ptr 1
+
+is chr +?
+addvar $current_cell 1
+
+is chr -?
+subvar $current_cell 1
+
+is chr .?
+ascii_lookup $current_cell_data finalchar
+is chr .?
+joinvar final_str $final_str $finalchar
+
+# not implemented: ,
+# no input support yet
+
+delflag jumpforward
+is chr [?
+push_stack $execution_ptr
+is chr [ AND current_cell_data 0?
+setflag jumpforward
+
+delflag jumpbackward
+delflag cond1
+delflag cond2
+is chr ]?
+setflag cond1
+is_ex current_cell_data > 0?
+setflag cond2
+flag cond1 AND cond2?
+setflag jumpbackward
+# Pop the matching [ off the stack
+is chr ] AND current_cell_data 0?
+pop_stack dump
+
+endmacro
+
+# only supports some printable characters
+# ascii_lookip <index> <dest>
+macro ascii_lookup
+set real_index $1
+subvar real_index 31
+set ascii_return
+//"{$real_index}"
+{ARRAY_GET_ITEM_BY_IDX ascii $real_index ascii_return}
+set $2 $ascii_return
+endmacro
+
+
+macro init_ascii_table
+{ARRAY_CREATE ascii 95}
+endmacro
+macro ascii_table_append
+{ARRAY_APPEND ascii $1}
+endmacro

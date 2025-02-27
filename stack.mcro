@@ -1,0 +1,27 @@
+# STACK.MCRO
+# by in1tiate
+# Stack data structure implementation in pure WrightScript
+# You can only have one because I didn't want to make this one instanced
+
+# push_stack <value>
+macro push_stack
+isempty current_top?
+set current_top 0
+addvar current_top 1
+joinvar new_var stack_item $current_top
+set $new_var $1
+endmacro
+
+# pop_stack <dest>
+macro pop_stack
+joinvar new_var stack_item $current_top
+getvar stack_return $new_var
+set $1 $stack_return
+subvar current_top 1
+endmacro
+
+macro peek_stack
+joinvar new_var stack_item $current_top
+getvar stack_return $new_var
+set $1 $stack_return
+endmacro

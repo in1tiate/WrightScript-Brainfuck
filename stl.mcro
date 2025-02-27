@@ -1,0 +1,321 @@
+// STL.MCRO
+// OR "Sempiterna Library"
+// OR "Standard Library"
+// by in1tiate
+// Standard library of useful high level scripting functions
+
+////////// --=== TYPES ===-- //////////
+
+//////// ITEMS ////////
+// we put the "Item" in "Object-Oriented Programming"
+// Items are implicitly created when you set one of their properties
+
+macro ITEM_SET_PROP
+joinvar __ITM_NAME ITEM_ $1
+joinvar __ITM_PROP $__ITM_NAME _PROP_
+joinvar __ITM_PROP $__ITM_PROP $2
+set $__ITM_PROP $3
+endmacro
+
+macro ITEM_SET_PROP_FROM_VAR
+joinvar __ITM_NAME ITEM_ $1
+joinvar __ITM_PROP $__ITM_NAME _PROP_
+set acc2 $3
+// is this dereferencing...?
+getvar acc2 $acc2
+joinvar __ITM_PROP $__ITM_PROP $2
+set $__ITM_PROP $acc2
+endmacro
+
+macro ITEM_GET_PROP
+joinvar __ITM_NAME ITEM_ $1
+joinvar __ITM_PROP $__ITM_NAME _PROP_
+joinvar __ITM_PROP $__ITM_PROP $2
+getvar $3 $__ITM_PROP
+endmacro
+
+//////// ARRAYS ////////
+// make lists of your things
+// Arrays are ordered lists of references to items
+// Supports append/insert/delete
+// The items you add to the array do not have to exist when you add them
+
+
+// Allocate a new array
+// Size is fixed. Making larger arrays takes more script time
+// Try to only make them as big as you actually need
+// Creating an array that already exists will effectively overwrite it
+// Syntax: ARRAY_CREATE {name} {size}
+macro ARRAY_CREATE
+joinvar __ARY_NAME ARRAY_ $1 _
+joinvar __ARY_SIZE $__ARY_NAME SIZE
+set $__ARY_SIZE $2
+joinvar __ARY_USED $__ARY_NAME USED
+set $__ARY_USED 0
+
+label ary_iterator_start
+isempty _ITER?
+goto ary_iterator_first
+
+// allocate all slots
+joinvar acc1 $__ARY_NAME $_ITER
+set $acc1
+
+label ary_iterator_first
+{ITERATE 1 $2 ary_iterator_start}
+endmacro
+
+// Append item to array
+// Nothing stops you from adding duplicate items
+// but you may have difficulty removing them if you do
+// Syntax: ARRAY_APPEND {array} {item}
+macro ARRAY_APPEND
+joinvar __ARY_NAME ARRAY_ $1 _
+joinvar __ARY_SIZE $__ARY_NAME SIZE
+getvar L_ARY_SIZE $__ARY_SIZE
+joinvar __ARY_USED $__ARY_NAME USED
+getvar L_ARY_USED $__ARY_USED
+
+is_ex L_ARY_USED >= L_ARY_SIZE?
+set _err Fatal error: Tried to append item ( $2 ) to array ( $1 ) but array was full!
+is_ex L_ARY_USED >= L_ARY_SIZE?
+THROW_ERROR
+
+addvar L_ARY_USED 1
+addvar $__ARY_USED 1
+joinvar __ARY_NEW $__ARY_NAME $L_ARY_USED
+set $__ARY_NEW $2
+endmacro
+
+// Delete an item from an array at the specified index
+// This gets more expensive the lower the index
+// Try not to do this unless you have to
+// Syntax: ARRAY_DELETE {array} {index}
+macro ARRAY_DELETE
+
+joinvar __ARY_NAME ARRAY_ $1 _
+set __ARY_CAP $L_ARY_USED
+subvar __ARY_CAP 1
+
+label ary_iterator_start
+isempty _ITER?
+goto ary_iterator_first
+//"{c090}{spd0}{$_ITER} of {$__ARY_CAP}{n}items moved"
+ARRAY_GET_ITEM_BY_IDX $1 $_ITER _ITM
+set _IDX $_ITER
+addvar _IDX 1
+ARRAY_GET_ITEM_BY_IDX $1 $_IDX _ITM2
+joinvar __ITM_ADDR $__ARY_NAME $_ITER
+set $__ITM_ADDR $_ITM2
+
+label ary_iterator_first
+{ITERATE $2 $__ARY_CAP ary_iterator_start}
+joinvar __ITM_ADDR $__ARY_NAME $L_ARY_USED
+set $__ITM_ADDR
+subvar $__ARY_USED 1
+endmacro
+
+// Insert an item into an array at the specified index
+// This gets more expensive the lower the index
+// Try not to do this unless you have to
+// Syntax: ARRAY_INSERT {array} {index} {item}
+macro ARRAY_INSERT
+
+is_ex L_ARY_USED >= L_ARY_SIZE?
+set _err Fatal error: Tried to insert item ( $2 ) into array ( $1 ) but array was full!
+is_ex L_ARY_USED >= L_ARY_SIZE?
+THROW_ERROR
+
+joinvar __ARY_NAME ARRAY_ $1 _
+set __ARY_CAP $L_ARY_USED
+addvar __ARY_CAP 1
+
+label ary_iterator_start
+isempty _ITER?
+goto ary_iterator_first
+
+is_ex _ITER == __ARY_CAP?
+goto ary_iterator_first
+ARRAY_GET_ITEM_BY_IDX $1 $_ITER _ITM
+set _IDX $_ITER
+addvar _IDX 1
+joinvar __ITM_ADDR $__ARY_NAME $_IDX
+set $__ITM_ADDR $_ITM
+
+label ary_iterator_first
+{ITERATE_DEC $__ARY_CAP $2 ary_iterator_start}
+joinvar __ITM_ADDR $__ARY_NAME $2
+set $__ITM_ADDR $3
+addvar $__ARY_USED 1
+endmacro
+
+// Get index of an item in an array and store it in a variable.
+// Returns -1 if array does not include the item
+// If the item is in the list more than once, the first instance of it will be returned
+// Syntax: ARRAY_GET_IDX_OF_ITEM {array} {item} {destination variable}
+macro ARRAY_GET_IDX_OF_ITEM
+joinvar __ARY_NAME ARRAY_ $1 _
+joinvar __ARY_SIZE $__ARY_NAME SIZE
+getvar L_ARY_SIZE $__ARY_SIZE
+
+label ary_iterator_start
+isempty _ITER?
+goto ary_iterator_first
+
+{ARRAY_GET_ITEM_BY_IDX $1 $_ITER _ITM}
+set _ITM_CHECK $2
+is_ex _ITM == _ITM_CHECK?
+goto ary_itm_found
+
+label ary_iterator_first
+{ITERATE 1 $L_ARY_SIZE ary_iterator_start}
+set $3 -1
+goto ary_getidx_fin
+
+label ary_itm_found
+set $3 $_ITER
+delflag _ITERATOR_DONE
+set _ITER
+set _ITER_RANGE
+
+label ary_getidx_fin
+endmacro
+
+// Get item from array by index
+// Syntax: ARRAY_GET_ITEM_BY_IDX {array} {index} {destination variable}
+macro ARRAY_GET_ITEM_BY_IDX
+
+joinvar __ARY_ITM ARRAY_ $1 _ $2
+getvar $3 $__ARY_ITM
+endmacro
+
+// Get property of an item in an array by its index (somewhat redundant...)
+// Syntax: ARRAY_GET_ITEM_PROP_BY_IDX {array} {index} {property} {destination variable}
+macro ARRAY_GET_ITEM_PROP_BY_IDX
+
+{ARRAY_GET_ITEM_BY_IDX $1 $2 __ARY_ITM}
+{ITEM_GET_PROP $__ARY_ITM $3 $4}
+endmacro
+
+// Get size of an array and store it in a variable
+macro ARRAY_GET_SIZE
+joinvar __ARY_NAME ARRAY_ $1 _
+joinvar __ARY_SIZE $__ARY_NAME SIZE
+getvar L_ARY_SIZE $__ARY_SIZE
+set $2 $L_ARY_SIZE
+endmacro
+
+// Get no. of used slots of an array and store it in a variable
+macro ARRAY_GET_USED
+joinvar __ARY_NAME ARRAY_ $1 _
+joinvar __ARY_USED $__ARY_NAME USED
+getvar L_ARY_USED $__ARY_USED
+set $2 $L_ARY_USED
+endmacro
+
+////////// --=== LOGIC ===-- //////////
+
+///// ITERATE
+// range-based for loop
+//
+//Arguments:
+//ITERATE {r_start} {r_end} {label_start}
+//- r_start = Start of the range of indicies to iterate over (inclusive)
+//- r_end = End of the range of indicies to iterate over (inclusive)
+//- label_start = Label to jump to when looping
+//
+//Example:
+//  label loopstart
+//  isempty _ITER?
+//  goto begin
+//  "Loop {$_ITER}"
+//  label begin
+//  {ITERATE 0 8 loopstart}
+//
+//Notes:
+//- Current index can be accessed via $_ITER
+//- $_ITER is empty when not looping
+//- r_start MUST be less than r_end or you will loop forever!!
+
+macro ITERATE
+
+// Do setup for first run
+flag _ITER_FIRST?
+delflag _ITER_FIRST
+isempty _ITER_RANGE?
+set _ITER_RANGE $2
+isempty _ITER?
+setflag _ITER_FIRST
+isempty _ITER?
+set _ITER $1
+
+// If we just started, go loop over the first index
+flag _ITER_FIRST?
+goto $3
+
+// Check if we're done looping
+is_ex $_ITER == $_ITER_RANGE ?
+setflag _ITERATOR_DONE
+
+// Increment index and loop
+addvar _ITER 1
+noflag _ITERATOR_DONE?
+goto $3
+
+// Clear internal variables and exit loop
+delflag _ITERATOR_DONE
+set _ITER
+set _ITER_RANGE
+endmacro
+
+// ITERATE_DEC
+// Like ITERATE, but index is subtracted instead of added to
+// Situationally useful. Doesn't work with negative ranges
+macro ITERATE_DEC
+
+// Do setup for first run
+flag _ITER_FIRST?
+delflag _ITER_FIRST
+isempty _ITER_RANGE?
+set _ITER_RANGE $2
+isempty _ITER?
+setflag _ITER_FIRST
+isempty _ITER?
+set _ITER $1
+
+// If we just started, go loop over the first index
+flag _ITER_FIRST?
+goto $3
+
+// Check if we're done looping
+is_ex $_ITER == $_ITER_RANGE ?
+setflag _ITERATOR_DONE
+
+// Decrement index and loop
+subvar _ITER 1
+noflag _ITERATOR_DONE?
+goto $3
+
+// Clear internal variables and exit loop
+delflag _ITERATOR_DONE
+set _ITER
+set _ITER_RANGE
+endmacro
+
+
+//// intvar
+//// caps a variable to integer range
+//// might not actually work
+macro intvar
+setvar in_mat1 $1
+label intvar_iter
+isempty _ITER?
+goto intvar_iter_start
+
+is_ex in_mat1 > _ITER?
+set in_mat2 $_ITER
+
+label intvar_iter_start
+{ITERATE 0 $2 intvar_iter}
+set $1 $in_mat2
+endmacro

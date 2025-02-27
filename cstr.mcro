@@ -1,0 +1,64 @@
+# CSTR.MCRO
+# I used the strings to create the strings
+# You could use this to build a Brainfuck interpreter if you wanted to
+
+# set chr1 a
+# set chr2 b
+# etc
+# cstr_write <name> <len>
+macro cstr_write
+{ARRAY_CREATE $1 $2}
+set len $2
+
+set idx 1
+label loopstart
+
+joinvar chara chr $idx
+getvar chara $chara
+{ARRAY_APPEND $1 $chara}
+addvar idx 1
+is_ex idx > len?
+goto endmacro
+goto loopstart
+
+label endmacro
+endmacro
+
+# cstr_read <name> <dest>
+macro cstr_read
+set idx 1
+label loopstart
+
+{ARRAY_GET_ITEM_BY_IDX $1 $idx chara}
+is chara END?
+goto endmacro
+joinvar finalstr $finalstr $chara
+addvar idx 1
+
+goto loopstart
+
+label endmacro
+set $2 $finalstr
+
+endmacro
+
+# cstr_read_substr <name> <start> <end> <dest>
+macro cstr_read_substr
+set idx $2
+set end $3
+label loopstart
+
+{ARRAY_GET_ITEM_BY_IDX $1 $idx chara}
+is chara END?
+goto endmacro
+joinvar finalstr $finalstr $chara
+addvar idx 1
+is_ex idx > end?
+goto endmacro
+
+goto loopstart
+
+label endmacro
+set $4 $finalstr
+
+endmacro
