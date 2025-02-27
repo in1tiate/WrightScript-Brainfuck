@@ -6,12 +6,17 @@ init_ascii_table
 include ascii
 "{sound none}{spd0}Loading program to memory..."
 include program
-cstr_write program 107
+cstr_write program 256
 cstr_read program program_str
 textblock 4 4 240 192 color=999 name=programblock $program_str
 "{sound none}{spd0}Program loaded!"
-pause 180
+pause 60
 delete name=programblock
+"{sound none}{spd0}Loading input to memory..."
+include input_formatted
+cstr_write input 256
+"{sound none}{spd0}Input loaded!"
+pause 60
 set _textbox_skipupdate true
 interpret_brainfuck
 "Done!"

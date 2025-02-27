@@ -1,0 +1,14 @@
+set chr1 H
+set chr2 e
+set chr3 l
+set chr4 l
+set chr5 o
+set chr6 ,
+set chr7  
+set chr8 W
+set chr9 o
+set chr10 r
+set chr11 l
+set chr12 d
+set chr13 !
+set chr14 END

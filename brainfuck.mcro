@@ -4,25 +4,28 @@
 ### by in1tiate
 ### May or may not work
 
+macro init_cells
+set cell_ptr 0
+label cell_loopstart
+joinvar current_cell cell $cell_ptr
+set $current_cell 0
+addvar cell_ptr 1
+is_ex cell_ptr <= 30000?
+goto cell_loopstart
+label endmacro
+endmacro
+
 # interpret_brainfuck <program>
 macro interpret_brainfuck
+"{sound none}{spd0}Initializing work memory..."
+pause 20
+init_cells
 mus thinking
-set _textbox_skipupdate true
 "{sound none}{spd0}Interpreting...{n}Please be patient."
 set execution_ptr 1
 set cell_ptr 0
 set depth_counter 0
-set cell0 0
-set cell1 0
-set cell2 0
-set cell3 0
-set cell4 0
-set cell5 0
-set cell6 0
-set cell7 0
-set cell8 0
-set cell9 0
-set cell10 0
+set input_idx 1
 set final_str
 
 label loopstart
@@ -34,11 +37,15 @@ delete name=cellblock1
 delete name=cellblock2
 delete name=cellblock3
 delete name=cellblock4
+delete name=cellblock5
 //"{spd0}Interpreting: {$chr}{n}exptr: {$execution_ptr} cellptr: {$cell_ptr}{n}{$cell0} {$cell1} {$cell2} {$cell3} {$cell4} {$cell5} {$cell6}"
-textblock 4 4 240 192 color=999 name=cellblock1 chr: $chr 
-textblock 4 24 240 192 color=999 name=cellblock2 ins: $execution_ptr 
-textblock 4 44 240 192 color=999 name=cellblock3 cll: $cell_ptr 
-textblock 4 64 240 192 color=999 name=cellblock4 c0: $cell0 c1: $cell1 c2: $cell2 c3: $cell3 c4: $cell4 c5: $cell5 c6: $cell6
+textblock 4 4 240 192 color=999 name=cellblock1 character: $chr 
+textblock 4 24 240 192 color=999 name=cellblock2 instruction index: $execution_ptr 
+textblock 4 44 240 192 color=999 name=cellblock3 cell: $cell_ptr 
+getvar current_cell_data $current_cell
+textblock 4 64 240 192 color=999 name=cellblock4 cell value: $current_cell_data
+textblock 4 84 240 192 color=999 name=cellblock5 input index: $input_idx
+
 flag jumpforward?
 goto handle_jumpforward
 flag jumpbackward?
@@ -105,8 +112,8 @@ ascii_lookup $current_cell_data finalchar
 is chr .?
 joinvar final_str $final_str $finalchar
 
-# not implemented: ,
-# no input support yet
+is chr ,?
+goto handle_input
 
 delflag jumpforward
 is chr [?
@@ -126,7 +133,17 @@ setflag jumpbackward
 # Pop the matching [ off the stack
 is chr ] AND current_cell_data 0?
 pop_stack dump
+goto endmacro
 
+label handle_input
+{ARRAY_GET_ITEM_BY_IDX input $input_idx i_chr}
+{ARRAY_GET_IDX_OF_ITEM ascii $i_chr output_idx}
+// normalize
+addvar output_idx 31
+set $current_cell $output_idx
+addvar input_idx 1
+
+label endmacro
 endmacro
 
 # only supports some printable characters
