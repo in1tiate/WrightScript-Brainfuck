@@ -1,9 +1,16 @@
 disable_court_record_button
-waitenter
+// Loads ASCII table into memory
+//init_ascii_table
+//include ascii
+//savegame ASCII
+
+// Externally altered save file in order to allow for supporting spaces
+// If filewrite worked, we could write this save file in-script and then load it
+// but it doesn't ¯\_(ツ)_/¯
+loadgame ASCII
+""
 set _textbox_skipupdate true
-"{sound none}{spd0}Initializing ASCII table..."
-init_ascii_table
-include ascii
+
 "{sound none}{spd0}Loading program to memory..."
 include program
 cstr_write program 512
@@ -18,5 +25,5 @@ cstr_write input 512
 "{sound none}{spd0}Input loaded!"
 pause 60
 set _textbox_skipupdate true
-interpret_brainfuck
+{interpret_brainfuck}
 "Done!"
