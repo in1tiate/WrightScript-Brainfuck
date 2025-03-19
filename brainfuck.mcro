@@ -8,7 +8,18 @@ macro timer_advance
 addvar timer_val 1
 timer 60 timer_advance
 endmacro
+
 macro init_cells
+set cell0
+set cell1
+set cell2
+set cell3
+set cell4
+set cell5
+set cell6
+endmacro
+
+macro i2nit_cells
 set cell_ptr 0
 label cell_loopstart
 joinvar current_cell cell $cell_ptr
